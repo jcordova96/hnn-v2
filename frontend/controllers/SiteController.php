@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use app\models\Article;
+use app\models\HnnAd;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -77,10 +78,14 @@ class SiteController extends Controller
     {
         $this->layout = 'hnn-2col-main';
 
+
+        $ads = HnnAd::findOne(['slot' => 'right_sidebar']);
+
         $data = array(
             'data' => array(
                 'recent_articles' => Article::getFrontPageArticles(),
-                'main_article' => Article::getMainArticle()
+                'main_article' => Article::getMainArticle(),
+                'ads' => $ads,
             )
         );
 

@@ -4,11 +4,12 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\Blog;
+use app\models\BlogAuthor;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\data\Pagination;
 /**
  * BlogController implements the CRUD actions for Blog model.
  */
@@ -27,6 +28,26 @@ class BlogController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionAuthor($id)
+    {
+        $this->layout = 'hnn-3col';
+        $query = Blog::find()->where(['status' => 1, 'author_id' => $id]);
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count]);
+        $blog_entries = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        $data = array('data' => array(
+                'author' => BlogAuthor::findOne(['id' => $id]),
+                'blog_entries' => $blog_entries,
+            ),
+            'pagination' => $pagination,
+        );
+
+        return $this->render('author', $data);
     }
 
     /**
@@ -101,6 +122,8 @@ class BlogController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

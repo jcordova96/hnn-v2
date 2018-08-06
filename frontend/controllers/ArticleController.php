@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use app\models\Category;
+use app\models\CategoryGroup;
+use app\models\Comment;
 use Yii;
 use app\models\Article;
 use yii\data\ActiveDataProvider;
@@ -29,18 +32,6 @@ class ArticleController extends Controller
         ];
     }
 
-
-//    public function actionIndex($id)
-//    {
-//        $query = Article::find()->where(['id' => $id]);
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => $query,
-//        ]);
-//        return $this->render('index', array(
-//            'dataProvider' => $dataProvider,
-//        ));
-//    }
-
     /**
      * Lists all Article models.
      * @return mixed
@@ -65,62 +56,54 @@ class ArticleController extends Controller
     public function actionView($id)
     {
         $this->layout = 'hnn-2col-alt';
-        $article = Article::findOne(['id' => $id]);
-//        $category =
+        $article = Article::findOne(['id' => $id, 'status' => 1]);
+        if(empty($article)) {
+            throw new yii\web\NotFoundHttpException(404);
+        }
 
+//        $article['lead_text'] = '';
+//           $article['images'] = File::getImages($id, "hnn");
 
+        $comments = Comment::find()->where(['nid' => $article->id])->orderBy(['timestamp' => SORT_DESC])->all();
 
-            ///////////////////////////////////////
+        \Yii::$app->view->registerMetaTag(['og:title' => $article->title, 'title' => $article->title]);
 
-            /*
-                    if (empty($article['status']) || $article['status'] != 1)
-                        throw new CHttpException(404, 'Page not found.');
+        $data = array('data' => array(
+            'article' => $article,
+            'legacy_comments' => $comments,
+        ));
 
-                    $category = null;
-                    if(isset($article['category_id']))
-                    {
-                        $category = Category::model()->find('id=:id', array(':id' => $article['category_id']));
-                    }
+        return $this->render('detail', $data);
+    }
 
-                    $article['lead_text'] = '';
-            //		$article['images'] = File::getImages($id, "hnn");
+    public function actionCategory($id)
+    {
+        $this->layout = 'hnn-3col';
+        $category = Category::findOne(['id' => $id]);
+        if (!empty($category)) {
+            $articles = Article::getArticleByCategory($id, array('limit' => 20));
+            $data = array('data' => array(
+                'articles' => $articles,
+                'category_id' => $id,
+            ));
+            return $this->render('category', $data);
+        }
+        else {
+            throw new yii\web\NotFoundHttpException(404);
+        }
+    }
 
-                    $result = Comment::model()->findAllByAttributes(array('nid' => $article['id']), array('order' => 'timestamp desc'));
-                    $comments = array();
-                    foreach ($result as $row)
-                        $comments[] = $row->getAttributes();
+    public function actionGroup($id)
+    {
+        $this->layout = 'hnn-3col';
 
-                    $article['tags'] = Tag::getTagsByNid($article['id'], "article", true);
+        $data = array('data' => array(
+            'articles' => Article::getArticleByCategoryGroup($id, array('limit' => 20)),
+            'category' => CategoryGroup::findOne(['id' => $id])->getAttribute('name'),
+            'group_id' => $id,
+        ));
 
-            //        echo print_r($comments, true);
-
-                    Yii::app()->clientScript->registerMetaTag($article['title'], null, null, array('property' => 'og:title'));
-                    Yii::app()->clientScript->registerMetaTag($article['title']." | History News Network", 'title');
-                    Yii::app()->clientScript->registerMetaTag('website', null, null, array('property' => 'og:type'));
-
-                    $imgSrc = Toolshed::getImage($article['body']);
-                    if (!empty($imgSrc))
-                        Yii::app()->clientScript->registerMetaTag(Yii::app()->params['host'].$imgSrc, null, null, array('property' => 'og:image'));
-
-                    $this->currentArticleTitle = $article['title'];
-
-
-            //		echo '<pre>'.print_r($article['images'], true).'</pre>';
-            */
-
-
-//        $data = array('data' => array(
-//            'article' => $article,
-////            'legacy_comments' => $comments,
-////            'category'=>$category
-//        ));
-//
-//        return $this->render('detail', $data);
-
-
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        return $this->render('category', $data);
     }
 
     /**
@@ -167,6 +150,8 @@ class ArticleController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

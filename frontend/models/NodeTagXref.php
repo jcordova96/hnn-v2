@@ -34,6 +34,10 @@ class NodeTagXref extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getTag() {
+        return $this->hasOne(Tag::className(), ['id' => 'tag_id']);
+    }
+
     /**
      * {@inheritdoc}
      */

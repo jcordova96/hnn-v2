@@ -6,11 +6,13 @@
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use app\components\Toolshed;
+use app\models\BlogAuthor;
+use app\models\HnnAd;
 
-$blog_authors = [];//BlogAuthor::getAuthors();
-$route = 'site/index/';//Yii::app()->controller->route . "/" . Yii::app()->getRequest()->getQuery('id');
+$blog_authors = BlogAuthor::getAuthors();
+$actionId = \Yii::$app->controller->id.'/'.\Yii::$app->controller->module->requestedAction->id;
+$route = \Yii::$app->controller->module->requestedRoute;
 //$detect = new Mobile_Detect();
-//echo "meta stuff:".$this;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -47,6 +49,7 @@ AppAsset::register($this);
     <!-- END: basic page needs -->
 
     <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/style-override.css" rel="stylesheet" type="text/css"/>
 
     <script type="text/javascript" src="/assets/js/head.js"></script>
 
@@ -93,7 +96,6 @@ AppAsset::register($this);
 
 <body>
 <?php $this->beginBody() ?>
-
 <!-- .container -->
 <section class="container top-gradient">
 
@@ -130,9 +132,7 @@ AppAsset::register($this);
                 <!-- /#menu -->
 
                 <!-- Newsletter signup begin -->
-                <?php
-                //$this->widget('NewsletterSignup', array('mode' => 'inline'));
-                ?>
+                <?php echo $this->render('/partials/newsletter-inline'); ?>
                 <!-- Newsletter signup end -->
 
             </nav>
@@ -186,7 +186,7 @@ AppAsset::register($this);
                 ?>
 
                 <ul class="nav">
-                    <li<?php if ($route == 'site/index/'): echo " class=\"active\""; endif; ?>><a href="/">Home</a></li>
+                    <li<?php if ($actionId == 'site/index'): echo " class=\"active\""; endif; ?>><a href="/">Home</a></li>
                     <li class="dropdown<?php if (($route == 'article/category/26') || ($route == 'article/category/55')): echo " active"; endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">News <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -220,7 +220,7 @@ AppAsset::register($this);
                         </ul>
                     </li`>
                     <li class="dropdown<?php if (stristr($route, 'jobPost/home')): echo " active"; endif; ?>">
-                        <a href="<?php //echo $this->createUrl('jobPost/home'); ?>" class="dropdown"
+                        <a href="<?php echo Yii::$app->urlManager->createUrl(['jobPost/home']); ?>" class="dropdown"
                            style="color:#ffffff">Job Board</a>
                     </li>
                     <?php if (!Yii::$app->user->isGuest): ?>
@@ -250,7 +250,9 @@ AppAsset::register($this);
     <!-- /div.navbar -->
 
     <!-- div#ad-top -->
-    <?php //$this->widget('AdServe', array('ad_slot' => 'topAds')); ?>
+    <?php $ads = HnnAd::getAdsHtml('top'); ?>
+    <?= $ads ?>
+
     <!-- /div#ad-top -->
 
     <div class="divider-top hidden-phone"></div>

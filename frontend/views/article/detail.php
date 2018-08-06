@@ -11,8 +11,8 @@ if (!empty($data['article']->teaser))
     $elipsesSuffix = (strlen(strip_tags($data['article']->teaser)) > 160) ? " ...":"";
 //    Yii::app()->clientScript->registerMetaTag($teaser.$elipsesSuffix, 'description');
 }
-$category = '';//$data['category'];
 ?>
+<?php $category = $data['article']->category ?>
 
 <?php if (!empty($data['article']->source)): ?>
     <span class="article-info">
@@ -29,12 +29,12 @@ $category = '';//$data['category'];
 	</span><br/>
 <?php else: ?>
     <span class="article-info">
-	<?php //echo date("n-j-y", $data['article']->created); ?>
-</span>
+        <?php //echo date("n-j-y", $data['article']->created); ?>
+    </span>
     <br/>
 <?php endif; ?>
 
-    <h1 class="no-uc"><?php //echo $data['article']->title; ?></h1>
+    <h1 class="no-uc"><?php echo $data['article']->title; ?></h1>
 
 <?php if (isset($category)): ?>
     <a style="color:#777;" href='/article/category/<?php echo $category->id; ?>'>
@@ -42,14 +42,15 @@ $category = '';//$data['category'];
     </a><br/>
 <?php endif; ?>
 
-<?php if (!empty($data['article']->tags)): ?>
+<?php $tags = $data['article']->getTags(); ?>
+<?php if (!empty($tags)): ?>
     tags:
-    <?php end($data['article']->tags);
-    $last_key = key($data['article']->tags);
-    reset($data['article']->tags); ?>
-    <?php foreach ($data['article']->tags as $tag_id => $tag): ?>
-        <a href="/tag/<?php echo $tag_id; ?>"
-           target="_blank"><?php echo $tag; ?></a><?php if ($tag_id != $last_key): ?>,<?php endif; ?>
+    <?php end($tags);
+    $last_key = key($tags);
+    reset($tags); ?>
+    <?php foreach ($tags as $tag): ?>
+        <a href="/tag/<?php echo $tag->id; ?>"
+           target="_blank"><?php echo $tag->name; ?></a><?php if ($tag->id != $last_key): ?>,<?php endif; ?>
     <?php endforeach; ?>
 <?php endif; ?>
     <br/>
@@ -73,7 +74,7 @@ $category = '';//$data['category'];
 <?php endif; ?>
 
     <div id="bodycopy">
-        <?php //echo $data['article']->body; ?>
+        <?php echo $data['article']->body; ?>
     </div>
 
 <?php if (!empty($data['article']->source_url)): ?>
@@ -84,8 +85,6 @@ $category = '';//$data['category'];
 <?php endif; ?>
 
     <hr/>
-
-    <!--    <hr/>-->
 
     <div id="disqus_thread"></div>
     <script type="text/javascript">
@@ -112,11 +111,11 @@ $category = '';//$data['category'];
         <hr/>
         <div>
             <h3>
-                <?php echo $comment['name']; ?> -
-                <?php echo date('n/j/Y', $comment['timestamp']); ?>
+                <?php echo $comment->name; ?> -
+                <?php echo date('n/j/Y', $comment->timestamp); ?>
             </h3>
 
-            <p><?php echo $comment['comment']; ?></p>
+            <p><?php echo $comment->comment; ?></p>
         </div>
     <?php endforeach; ?>
 <?php endif; ?>

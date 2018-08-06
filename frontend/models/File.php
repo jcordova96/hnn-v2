@@ -89,7 +89,7 @@ class File extends \yii\db\ActiveRecord
             {
                 unlink($filepath);
 
-                $connection = Yii::app()->db;
+                $connection = Yii::$app->getDb();
                 $sql = "delete from file where filepath = '{$filepath}'";
                 $command = $connection->createCommand($sql);
                 $command->execute();
@@ -99,7 +99,7 @@ class File extends \yii\db\ActiveRecord
 
     public static function getImages($nid, $type)
     {
-        $connection = Yii::app()->db;
+        $connection = Yii::$app->getDb();
 
         $data = array();
 

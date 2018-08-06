@@ -52,9 +52,16 @@ class TagController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $this->layout = 'hnn-3col';
+
+        $tag = Tag::findOne(['id' => $id])->getAttributes();
+
+        $data = array('data' => array(
+            'tag' => $tag,
+            'nodes' => Tag::getNodesByTagId($id),
+        ));
+
+        return $this->render('list', $data);
     }
 
     /**
@@ -101,6 +108,8 @@ class TagController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

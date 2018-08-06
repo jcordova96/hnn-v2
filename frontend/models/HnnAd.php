@@ -34,6 +34,47 @@ class HnnAd extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAdsHtml($slot) {
+        $html = HnnAd::findOne(['slot' => $slot])->ad_code;
+        $adContent = ($html == null) ? "" : $html;//self::addBaseUrl($html);
+        return $adContent;
+    }
+
+    private static function addBaseUrl($html)
+    {
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($html);
+
+        $element_types = array('a', 'img', 'script');
+
+        foreach ($element_types as $element_type)
+        {
+            $elements = $dom->getElementsByTagName($element_type);
+
+            foreach ($elements as $element)
+            {
+                if ($element->hasAttributes())
+                {
+                    foreach ($element->attributes as $attr)
+                    {
+                        if ($attr->nodeName == 'src')
+                        {
+                            if (!(trim(strtolower(substr($attr->nodeValue, 0, 4))) == 'http')) //if it is a local request ..
+                            {
+                                //add base path to src attribute
+                                $sBasePath = ($attr->nodeValue{0} !== '/') ? "/" . Yii::app()->request->baseUrl : Yii::app()->request->baseUrl;
+                                $attr->nodeValue = $sBasePath . $attr->nodeValue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+
     /**
      * {@inheritdoc}
      */

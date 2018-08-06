@@ -47,4 +47,15 @@ class Trendingarticle extends \yii\db\ActiveRecord
             'type' => 'Type',
         ];
     }
+
+    public function getItem()
+    {
+        if($this->type == 'article') {
+            return $this->hasOne(Article::className(), ['id' => 'itemId']);
+        }
+        else if($this->type == 'blog') {
+            return $this->hasOne(Blog::className(), ['id' => 'itemId']);
+        }
+    }
+
 }

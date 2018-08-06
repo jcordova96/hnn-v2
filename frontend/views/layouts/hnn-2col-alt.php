@@ -9,7 +9,7 @@ use app\models\HnnAd;
 <?php $this->beginContent('@app/views/layouts/hnn-main-1.php'); ?>
 
     <!-- Center column -->
-    <div id="center-column" class="span9 new-main">
+    <div id="center-column" class="span9">
 
         <?php echo $content; ?>
 
@@ -17,20 +17,7 @@ use app\models\HnnAd;
 
     <!-- Right column -->
     <div id="right-column" class="span3 center-content">
-        <!-- social media links begin -->
-        <div class="social-media-button-container">
-            <a href="//www.facebook.com/pages/History-News-Network/187220577957886?v=info">
-                <img alt="" src="//historynewsnetwork.org/sites/default/files/68.png" style="height: 32px; width: 32px;">
-            </a>
-            <a href="https://twitter.com/myHNN">
-                <img alt="" src="//historynewsnetwork.org/sites/default/files/Twitter-icon.png"
-                     style="width: 32px; height: 32px;">
-            </a>
-            <a href="//www.linkedin.com/groups/History-News-Network-4682603/about">
-                <img alt="" src="//historynewsnetwork.org/sites/default/files/linkedin.jpg" style="width: 32px; height: 32px;">
-            </a>
-        </div>
-        <!-- social media links end -->
+
         <!-- News widget begin -->
         <div id="news-widget" class="tabbable">
             <h1 class="invert">News</h1>
@@ -69,7 +56,7 @@ use app\models\HnnAd;
                 </div>
             </div>
         </div>
-        <!-- News widget end --
+        <!-- News widget end -->
 
         <!-- Trending widget begin -->
         <?php $trendingItemData = Article::getTrendingItemData() ?>
@@ -99,26 +86,10 @@ use app\models\HnnAd;
         <?php endif; ?>
         <!-- Trending widget end -->
 
-
         <!-- Right sidebar ads begin -->
-        <!-- testing placement -->
         <?php $ads = HnnAd::getAdsHtml('right_sidebar'); ?>
         <?= $ads ?>
         <!-- Right sidebar ads end -->
-
-        <!-- Twitter begin -->
-        <a class="twitter-timeline" href="https://twitter.com/myHNN" data-widget-id="343410152646524928">Tweets by
-            @myHNN</a>
-        <script>!function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = p + "://platform.twitter.com/widgets.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, "script", "twitter-wjs");</script>
-        <!-- Twitter end -->
 
     </div>
 

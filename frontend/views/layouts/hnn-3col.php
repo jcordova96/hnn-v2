@@ -1,5 +1,13 @@
-<?php /* @var $this Controller */ ?>
-<?php $this->beginContent('//layouts/hnn-main-1'); ?>
+<?php
+
+/* @var $this Controller */
+
+use app\models\Article;
+use app\models\HnnAd;
+use app\models\BlogAuthor;
+
+?>
+<?php $this->beginContent('@app/views/layouts/hnn-main-1.php'); ?>
 <?php $blog_authors = BlogAuthor::getAuthors(); ?>
 
     <!-- Left column -->
@@ -82,8 +90,8 @@
                     <ul>
                         <?php foreach (Article::getBreakingNews() as $article): ?>
                             <li>
-                                <a href="<?php echo $this->createUrl('article/' . $article['id']); ?>">
-                                    <?php echo $article['title']; ?>
+                                <a href="<?php echo Yii::$app->urlManager->createUrl(['article/' . $article->id]); ?>">
+                                    <?php echo $article->title; ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -93,8 +101,8 @@
                     <ul>
                         <?php foreach (Article::getHistoryNews() as $article): ?>
                             <li>
-                                <a href="<?php echo $this->createUrl('article/' . $article['id']); ?>">
-                                    <?php echo $article['title']; ?>
+                                <a href="<?php echo Yii::$app->urlManager->createUrl(['article/' . $article->id]); ?>">
+                                    <?php echo $article->title; ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -120,8 +128,8 @@
                         <ul>
                             <?php foreach ($trendingItemData as $item): ?>
                                 <li>
-                                    <a href="<?php echo $this->createUrl($item['type'].'/' . $item['id']); ?>">
-                                        <?php echo $item['title']; ?>
+                                    <a href="<?php echo Yii::$app->urlManager->createUrl([$item->type.'/' . $item->item->id]); ?>">
+                                        <?php echo $item->item->title; ?>
                                     </a>
                                 </li>
                             <?php endforeach; ?>
@@ -133,7 +141,7 @@
         <!-- Trending widget end -->
 
         <!-- Right sidebar ads begin -->
-        <?php $this->widget('AdServe', array('ad_slot' => 'rightSidebarAds')); ?>
+        <?php $ads = HnnAd::getAdsHtml('right_sidebar'); ?>
         <!-- Right sidebar ads end -->
 
     </div>

@@ -10,16 +10,9 @@ use yii\web\View;
 use yii\helpers\Url;
 use app\models\File;
 
-//echo "<pre>" . print_r($data['recent_articles'], true) . "</pre>";
-
-//$this->pageTitle = Yii::app()->name;
-
-//Yii::app()->clientScript->registerScriptFile(Url::base() . '/js/tile-normalize.js', View::POS_END);
-
 $this->registerJsFile(
     '@web/js/tile-normalize.js'
 );
-
 
 $mainArticleId = (isset($data['recent_articles']['mainArticleId'])) ? $data['recent_articles']['mainArticleId'] : null;
 if(isset($data['recent_articles']['mainArticleId']))
@@ -83,10 +76,10 @@ if(isset($data['recent_articles']['mainArticleId']))
                         <?php endif; ?>
 
                         <?php if (isset($article_data->category)): ?>
-                            <a style="color:#777;" href='/article/category/<?php echo $article_data->category_id; ?>'
+                            <a style="color:#777;" href='/article/category/<?php echo $article_data->category->id; ?>'
                                style="display:block;margin:2px;">
                                 <span class="label label-info">
-                                    <?php echo $article_data->category; ?>
+                                    <?php echo $article_data->category->name; ?>
                                 </span>
                             </a><br/>
                             <?php elseif($article_data->getType() == 'blog'): ?>
