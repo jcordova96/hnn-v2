@@ -2,7 +2,7 @@
 /* @var $this SiteController */
 //echo "<pre>" . print_r($data['recent_articles'], true) . "</pre>";
 
-$this->pageTitle = Yii::app()->name;
+$this->pageTitle = Yii::$app->name;
 if(isset($data['recent_articles']['mainArticleId']))
 {
     unset($data['recent_articles']['mainArticleId']);
@@ -10,7 +10,7 @@ if(isset($data['recent_articles']['mainArticleId']))
 ?>
 
 <h1 class="invert">The Latest<a class="rss pull-right" href="rss.xml"><img
-            src="<?php echo Yii::app()->request->baseUrl; ?>/images/icon/rss.png"></a></h1>
+            src="<?php echo Yii::$app->request->baseUrl; ?>/images/icon/rss.png"></a></h1>
 
 <?php foreach ($data['recent_articles'] as $i => $article_data): ?>
     <?php if (!empty($article_data)): ?>

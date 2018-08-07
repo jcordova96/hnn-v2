@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use app\models\Blog;
 use app\models\BlogAuthor;
+use app\models\Comment;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -73,9 +74,25 @@ class BlogController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $this->layout = 'hnn-2col-alt';
+        $blog = Blog::findOne(['id' => $id, 'status' => 1]);
+        if(empty($blog)) {
+            throw new yii\web\NotFoundHttpException(404);
+        }
+
+//        $blog['lead_text'] = '';
+//           $blog['images'] = File::getImages($id, "hnn");
+
+        $comments = Comment::find()->where(['nid' => $blog->id])->orderBy(['timestamp' => SORT_DESC])->all();
+
+        \Yii::$app->view->registerMetaTag(['og:title' => $blog->title, 'title' => $blog->title]);
+
+        $data = array('data' => array(
+            'blog' => $blog,
+            'legacy_comments' => $comments,
+        ));
+
+        return $this->render('detail', $data);
     }
 
     /**

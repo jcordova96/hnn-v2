@@ -5,6 +5,7 @@
 //Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl . '/css/hnn/bodycopy.css');
 //Yii::app()->clientScript->registerScript('pwrapper', '$(\'div#bodycopy\').contents().filter(function() { return this.nodeType === 3 && $.trim(this.textContent).length }).wrap(\'</p>\');');
 
+$this->title = $data['article']->title;
 if (!empty($data['article']->teaser))
 {
     $teaser = substr(strip_tags($data['article']->teaser), 0, 160);

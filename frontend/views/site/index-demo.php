@@ -8,8 +8,8 @@
 /* @var $this SiteController */
 //echo "<pre>" . print_r($data['recent_articles'], true) . "</pre>";
 
-$this->pageTitle = Yii::app()->name;
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/tile-normalize.js', CClientScript::POS_END);
+$this->pageTitle = Yii::$app->name;
+Yii::$app->clientScript->registerScriptFile(Yii::$app->request->baseUrl . '/js/tile-normalize.js', CClientScript::POS_END);
 $mainArticleId = (isset($data['recent_articles']['mainArticleId'])) ? $data['recent_articles']['mainArticleId'] : null;
 if(isset($data['recent_articles']['mainArticleId']))
 {
@@ -41,7 +41,7 @@ if(isset($data['recent_articles']['mainArticleId']))
 <?php endif; ?>
 
 <h1 class="invert">The Latest <a class="rss pull-right" href="rss.xml"><img
-            src="<?php echo Yii::app()->request->baseUrl; ?>/images/icon/rss.png"></a></h1>
+            src="<?php echo Yii::$app->request->baseUrl; ?>/images/icon/rss.png"></a></h1>
 
 <ul class="thumbnails">
     <?php $count=0; foreach ($data['recent_articles'] as $i => $article_data): ?>

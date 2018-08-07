@@ -16,11 +16,10 @@ use app\models\File;
     <?php $tnImg = File::getTnImage($node_data['id'], $node_data['type']) ?>
 	<ul class="thumbnails">
 		<li class="span2">
-			<?php if (!empty($node_data['tn_img'])): ?>
+			<?php if (!empty($tnImg)): ?>
 				<div class="thumbnail">
 					<a href="/<?php echo $node_data['type']; ?>/<?php echo $node_data['id']; ?>">
-						<img src="<?php echo $node_data['tn_img']; ?>"
-							 alt="">
+						<img src="<?php echo $tnImg; ?>" alt="">
 					</a>
 				</div>
 			<?php endif; ?>

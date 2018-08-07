@@ -3,10 +3,13 @@
 /* @var $model LoginForm */
 /* @var $form CActiveForm */
 
-$this->pageTitle = Yii::app()->name . ' - Login';
-$this->breadcrumbs = array(
-    'Login',
-);
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+
+//$this->pageTitle = Yii::$app->name . ' - Login';
+//$this->breadcrumbs = array(
+//    'Login',
+//);
 ?>
 
 <h1>Login</h1>
@@ -16,47 +19,41 @@ $this->breadcrumbs = array(
         <p>Please fill out the following form with your login credentials:</p>
 
         <div class="form">
-            <?php $form = $this->beginWidget('CActiveForm', array(
+            <?php $form = ActiveForm::begin([
                 'id' => 'login-form',
                 'enableClientValidation' => true,
-                'clientOptions' => array(
-                    'validateOnSubmit' => true,
-                ),
-            )); ?>
+//                'clientOptions' => array(
+//                    'validateOnSubmit' => true,
+//                ),
+            ]); ?>
 
             <p class="note">Fields with <span class="required">*</span> are required.</p>
 
             <div class="row">
                 <div class="span6">
-                    <?php echo $form->labelEx($model, 'username'); ?>
-                    <?php echo $form->textField($model, 'username'); ?>
-                    <?php echo $form->error($model, 'username'); ?>
+                    <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="span6">
-                    <?php echo $form->labelEx($model, 'password'); ?>
-                    <?php echo $form->passwordField($model, 'password'); ?>
-                    <?php echo $form->error($model, 'password'); ?>
+                    <?= $form->field($model, 'password')->passwordInput() ?>
                 </div>
             </div>
 
             <div class="row rememberMe">
                 <div class="span6">
-                    <?php echo $form->checkBox($model, 'rememberMe'); ?>
-                    <?php echo $form->label($model, 'rememberMe'); ?>
-                    <?php echo $form->error($model, 'rememberMe'); ?>
+                    <?= $form->field($model, 'rememberMe')->checkbox() ?>
                 </div>
             </div>
 
             <div class="row buttons">
                 <div class="span6">
-                    <?php echo CHtml::submitButton('Login'); ?>
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
                 </div>
             </div>
 
-            <?php $this->endWidget(); ?>
+            <?php ActiveForm::end() ?>
         </div>
         <!-- form -->
     </div>

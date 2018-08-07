@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use common\models\User;
 
 /**
  * This is the model class for table "blog_author".
@@ -82,5 +83,13 @@ class BlogAuthor extends \yii\db\ActiveRecord
     public function getBlogs()
     {
         return $this->hasMany(Blog::className(), ['author_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'uid']);
     }
 }

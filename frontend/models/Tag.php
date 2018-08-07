@@ -131,7 +131,7 @@ class Tag extends \yii\db\ActiveRecord
 
         $result = array_merge($result, $result2);
 
-        return $data;
+        return $result;
     }
 
     /**
