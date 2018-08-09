@@ -7,7 +7,7 @@ use app\models\CategoryGroup;
 use app\models\Comment;
 use Yii;
 use app\models\Article;
-use yii\data\ActiveDataProvider;
+use frontend\models\ArticleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,11 +38,11 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Article::find(),
-        ]);
+        $searchModel = new ArticleSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

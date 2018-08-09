@@ -1,5 +1,7 @@
 <?php
 /* @var $this BlogController */
+use app\models\Blog;
+
 //Yii::$app->clientScript->registerCssFile(Yii::$app->request->getBaseUrl() . '/css/hnn/bodycopy.css');
 $this->title = $data['blog']->title;
 if (!empty($data['blog']->teaser))
@@ -12,7 +14,7 @@ if (!empty($data['blog']->teaser))
 
 <p>Blogs <span class="breadcrumb-divider">></span> <a
         href="<?php echo Yii::$app->getUrlManager()->createUrl('author/'.$data['blog']->author_id); ?>"><span
-            style="text-decoration: underline;"><?php echo $data['blog']->author->author; ?></span></a> <span
+            style="text-decoration: underline;"><?php if($data['blog']->author instanceof Blog) echo $data['blog']->author->author; ?></span></a> <span
         class="breadcrumb-divider">></span> <a><?php echo $data['blog']->title; ?></a></p>
 
 <span class="blog-info">

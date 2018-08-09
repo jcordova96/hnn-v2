@@ -5,8 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use app\models\Blog;
 use app\models\BlogAuthor;
+use frontend\models\BlogSearch;
 use app\models\Comment;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,11 +57,11 @@ class BlogController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Blog::find(),
-        ]);
+        $searchModel = new BlogSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
